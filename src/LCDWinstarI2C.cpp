@@ -57,34 +57,34 @@ inline void LCDWinstarI2C::write(uint8_t value)
 
 LCDWinstarI2C::LCDWinstarI2C(uint8_t address)
 {
-    m_address = address;
+    _address = address;
 }
 
 void LCDWinstarI2C::init(uint8_t address)
 {
-    m_address = address;
+    _address = address;
 }
 
 void LCDWinstarI2C::begin(uint8_t cols, uint8_t rows,
     uint8_t dotSize, uint8_t initWire)
 {
-    m_cols = cols;
-    m_rows = rows;
+    _cols = cols;
+    _rows = rows;
 
-    m_displayFunction = LCD_I2C_MODE | LCD_1LINE | LCD_5x8DOTS;
+    _displayFunction = LCD_I2C_MODE | LCD_1LINE | LCD_5x8DOTS;
 
     // turn the display on with no cursor or blinking default
-    m_displayControl = LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF;
+    _displayControl = LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF;
     
     // Initialize to default text direction (for roman languages)
-    m_displayMode = LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT;
+    _displayMode = LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT;
     
     if (rows > 1)
-        m_displayFunction |= LCD_2LINE;
+        _displayFunction |= LCD_2LINE;
     
     // for some 1 line displays you can select a 10 pixel high font
     if ((dotSize != 0) && (rows == 1))
-        m_displayFunction |= LCD_5x10DOTS;
+        _displayFunction |= LCD_5x10DOTS;
 
     if (initWire)
         Wire.begin();
@@ -94,7 +94,7 @@ void LCDWinstarI2C::begin(uint8_t cols, uint8_t rows,
     delay(20); 
 
     // set # lines, font size, etc.
-    command(LCD_FUNCTIONSET | m_displayFunction);
+    command(LCD_FUNCTIONSET | _displayFunction);
     
     // Wait for more than 100 us (We'll wait 150 us)
     delayMicroseconds(150);
@@ -111,7 +111,7 @@ void LCDWinstarI2C::begin(uint8_t cols, uint8_t rows,
     delayMicroseconds(150);
     
     // set the entry mode
-    command(LCD_ENTRYMODESET | m_displayMode);
+    command(LCD_ENTRYMODESET | _displayMode);
 
     home();
 }
@@ -138,8 +138,8 @@ void LCDWinstarI2C::home(){
 void LCDWinstarI2C::setCursor(uint8_t col, uint8_t row)
 {
     uint8_t rowOffsets[] = { 0x00, 0x40, 0x14, 0x54 };
-    if (row >= m_rows)
-        row = m_rows - 1;
+    if (row >= _rows)
+        row = _rows - 1;
 
     command(LCD_SETDDRAMADDR | (col + rowOffsets[row]));
 }
@@ -147,39 +147,39 @@ void LCDWinstarI2C::setCursor(uint8_t col, uint8_t row)
 // Turn the display on/off (quickly)
 void LCDWinstarI2C::noDisplay()
 {
-    m_displayControl &= ~LCD_DISPLAYON;
-    command(LCD_DISPLAYCONTROL | m_displayControl);
+    _displayControl &= ~LCD_DISPLAYON;
+    command(LCD_DISPLAYCONTROL | _displayControl);
 }
 
 void LCDWinstarI2C::display()
 {
-    m_displayControl |= LCD_DISPLAYON;
-    command(LCD_DISPLAYCONTROL | m_displayControl);
+    _displayControl |= LCD_DISPLAYON;
+    command(LCD_DISPLAYCONTROL | _displayControl);
 }
 
 // Turns the underline cursor on/off
 void LCDWinstarI2C::noCursor()
 {
-    m_displayControl &= ~LCD_CURSORON;
-    command(LCD_DISPLAYCONTROL | m_displayControl);
+    _displayControl &= ~LCD_CURSORON;
+    command(LCD_DISPLAYCONTROL | _displayControl);
 }
 void LCDWinstarI2C::cursor()
 {
-    m_displayControl |= LCD_CURSORON;
-    command(LCD_DISPLAYCONTROL | m_displayControl);
+    _displayControl |= LCD_CURSORON;
+    command(LCD_DISPLAYCONTROL | _displayControl);
 }
 
 // Turn on and off the blinking cursor
 void LCDWinstarI2C::noBlink()
 {
-    m_displayControl &= ~LCD_BLINKON;
-    command(LCD_DISPLAYCONTROL | m_displayControl);
+    _displayControl &= ~LCD_BLINKON;
+    command(LCD_DISPLAYCONTROL | _displayControl);
 }
 
 void LCDWinstarI2C::blink()
 {
-    m_displayControl |= LCD_BLINKON;
-    command(LCD_DISPLAYCONTROL | m_displayControl);
+    _displayControl |= LCD_BLINKON;
+    command(LCD_DISPLAYCONTROL | _displayControl);
 }
 
 // These commands scroll the display without changing the RAM
@@ -196,29 +196,29 @@ void LCDWinstarI2C::scrollDisplayRight(void)
 // This is for text that flows Left to Right
 void LCDWinstarI2C::leftToRight(void)
 {
-    m_displayMode |= LCD_ENTRYLEFT;
-    command(LCD_ENTRYMODESET | m_displayMode);
+    _displayMode |= LCD_ENTRYLEFT;
+    command(LCD_ENTRYMODESET | _displayMode);
 }
 
 // This is for text that flows Right to Left
 void LCDWinstarI2C::rightToLeft(void)
 {
-    m_displayMode &= ~LCD_ENTRYLEFT;
-    command(LCD_ENTRYMODESET | m_displayMode);
+    _displayMode &= ~LCD_ENTRYLEFT;
+    command(LCD_ENTRYMODESET | _displayMode);
 }
 
 // This will 'right justify' text from the cursor
 void LCDWinstarI2C::autoscroll(void)
 {
-    m_displayMode |= LCD_ENTRYSHIFTINCREMENT;
-    command(LCD_ENTRYMODESET | m_displayMode);
+    _displayMode |= LCD_ENTRYSHIFTINCREMENT;
+    command(LCD_ENTRYMODESET | _displayMode);
 }
 
 // This will 'left justify' text from the cursor
 void LCDWinstarI2C::noAutoscroll(void)
 {
-    m_displayMode &= ~LCD_ENTRYSHIFTINCREMENT;
-    command(LCD_ENTRYMODESET | m_displayMode);
+    _displayMode &= ~LCD_ENTRYSHIFTINCREMENT;
+    command(LCD_ENTRYMODESET | _displayMode);
 }
 
 // Allows us to fill the first 8 CGRAM locations
@@ -254,7 +254,7 @@ inline void LCDWinstarI2C::command(uint8_t value)
 
 size_t LCDWinstarI2C::write(const uint8_t *buffer, size_t size)
 {
-    Wire.beginTransmission(m_address);
+    Wire.beginTransmission(_address);
 
     // Last word command
     WriteI2C(A0_RAM | C0_ONLY_DATABYTE_FOLLOWS);
@@ -277,7 +277,7 @@ size_t LCDWinstarI2C::write(const uint8_t *buffer, size_t size)
 // CGRAM)
 size_t LCDWinstarI2C::write(const __FlashStringHelper *ifsh, size_t size)
 {
-    Wire.beginTransmission(m_address);
+    Wire.beginTransmission(_address);
 
     // Last word command
     WriteI2C(A0_RAM | C0_ONLY_DATABYTE_FOLLOWS);
@@ -315,7 +315,7 @@ size_t LCDWinstarI2C::write(const __FlashStringHelper *ifsh, size_t size)
 // write either command or data
 uint8_t LCDWinstarI2C::send(uint8_t value, uint8_t mode)
 {
-    Wire.beginTransmission(m_address);
+    Wire.beginTransmission(_address);
 
     // word command
     WriteI2C(mode | C0_ONLY_DATABYTE_FOLLOWS); // control byte
