@@ -36,11 +36,11 @@ the I2C interface (`LCD_I2C_MODE 0x10`).
 ```cpp
 #include <LCDWinstarI2C.h>
 
-LCDWinstarI2C lcd(0x3C);   // I2C address of the Winstar display
+LCDWinstarI2C lcd(0x3C, 16, 2);  // address, cols, rows
 
 void setup()
 {
-    lcd.begin(16, 2);       // 16 columns, 2 rows
+    lcd.init();             // initialises Wire and the display
     lcd.setCursor(0, 0);
     lcd.print("Hello, World!");
 }
@@ -51,20 +51,24 @@ void loop() {}
 ### Constructor
 
 ```cpp
-LCDWinstarI2C(uint8_t address);
+LCDWinstarI2C(uint8_t address, uint8_t cols, uint8_t rows);
 ```
 
 `address` — 7-bit I2C address (typically `0x3C` for Winstar modules).
 
-### begin()
+### init() / begin()
 
 ```cpp
+void init();   // calls Wire.begin() then begin(cols, rows)
+
 void begin(uint8_t cols, uint8_t rows,
            uint8_t dotSize = LCD_5x8DOTS,
            uint8_t initWire = true);
 ```
 
-Pass `initWire = false` if `Wire.begin()` has already been called before `begin()`.
+Use `init()` for normal setup (mirrors `LiquidCrystal_I2C`).
+Use `begin()` directly when you need to override cols/rows or skip `Wire.begin()`
+by passing `initWire = false`.
 
 ---
 
