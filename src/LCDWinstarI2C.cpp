@@ -55,14 +55,17 @@ inline void LCDWinstarI2C::write(uint8_t value)
 // can't assume that its in that state when a sketch starts (and the
 // LiquidCrystal constructor is called).
 
-LCDWinstarI2C::LCDWinstarI2C(uint8_t address)
+LCDWinstarI2C::LCDWinstarI2C(uint8_t address, uint8_t cols, uint8_t rows)
 {
     _address = address;
+    _cols = cols;
+    _rows = rows;
 }
 
-void LCDWinstarI2C::init(uint8_t address)
+void LCDWinstarI2C::init()
 {
-    _address = address;
+    Wire.begin();
+    begin(_cols, _rows);
 }
 
 void LCDWinstarI2C::begin(uint8_t cols, uint8_t rows,

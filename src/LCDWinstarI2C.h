@@ -42,9 +42,9 @@
 
 class LCDWinstarI2C : public Print {
 public:
-    LCDWinstarI2C(uint8_t address);
-        
-    void init(uint8_t address);
+    LCDWinstarI2C(uint8_t address, uint8_t cols, uint8_t rows);
+
+    void init();
 
     void begin(uint8_t cols, uint8_t rows,
         uint8_t dotSize = LCD_5x8DOTS, uint8_t initWire = true);
