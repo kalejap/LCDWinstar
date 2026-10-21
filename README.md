@@ -1,4 +1,4 @@
-# LCDWinstar
+# LCDWinstarI2C
 
 Arduino library for Winstar I2C text LCD displays.
 
